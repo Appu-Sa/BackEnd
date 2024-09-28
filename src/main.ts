@@ -1,8 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
+  // Load .env.production
+  dotenv.config({ path: '.env.production' });
+
   const app = await NestFactory.create(AppModule, { 
     logger: ['error', 'warn', 'debug', 'log', 'verbose'],
   });
@@ -14,10 +18,11 @@ async function bootstrap() {
     validationError: { target: false, value: true },
   }));
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
-  await app.listen(3001);
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
 }
 bootstrap();

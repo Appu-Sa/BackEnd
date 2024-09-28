@@ -17,7 +17,6 @@ async function bootstrap() {
     disableErrorMessages: false,
     validationError: { target: false, value: true },
   }));
-  app.enableCors({});
   const port = process.env.PORT || 3001;
   await app.listen(port);
 }
